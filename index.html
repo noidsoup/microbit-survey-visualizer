@@ -1,43 +1,17 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <link href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css" rel="stylesheet" type="text/css" />
-    <title>microbit-chart</title>
+    <title>base-ticket-config</title>
+    <style>
+      body {
+        color: #000;
+        background: #fff;
+      }
+    </style>
   </head>
   <body>
-    <div id="app">
-      <h1><div id="vote"></div></h1>
-      <div class="ct-chart"></div>
-    </div>
+    <div id="app"></div>
+    <!-- built files will be auto injected -->
   </body>
-  <script src="/socket.io/socket.io.js"></script>
-  <script>
-    const socket = io('http://localhost');
-    const chartData = {
-      series: [1, 1]
-    };
-    socket.on('vote', function (data) {
-      const vote = document.getElementById('vote');
-
-      if (data.vote === '0') {
-        vote.innerText = "nay";
-      }
-      if (data.vote === '1') {
-        vote.innerText = "yay";
-      }
-      console.log(data);
-    });
-
-    const sum = function(a, b) { return a + b };
-
-    const chart = new Chartist.Pie('.ct-chart', chartData, {
-      labelInterpolationFnc: function(value) {
-        return Math.round(value / chartData.series.reduce(sum) * 100) + '%';
-      }
-    });
-
-  </script>
 </html>
