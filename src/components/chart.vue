@@ -1,25 +1,51 @@
 <template>
-  <div class="hello">
-    <h1>wat</h1>
-  </div>
+<div>
+  <chartist
+    ratio="ct-chart ct-major-tenth"
+    type="Pie"
+    :data="chartData"
+    :options="chartOptions">
+  </chartist>
+<div>
 </template>
 
 <script>
-import io from "socket.io-client";
+import io from 'socket.io-client';
 
 export default {
-  name: 'HelloWorld',
+  name: 'chart',
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App'
+      chartData: {
+        labels: ['yes', 'no'],
+        series: [1, 1]
+      },
+      yes: 1,
+      no: 1,
+      chartOptions: {
+        height: 800,
+      },
+      msg: 'Welcome to Your Vue.js App',
+      socket: io(`http://${window.location.hostname}:3000`),
+      vote: undefined,
     }
   },
-  mounted() {
-    console.log(io);
-    io.on('vote', function (data) {
-      console.log(data);
+  mounted: function () {
+    this.socket.on('vote', (data) => {
+      this.vote = data.vote;
+      if (this.vote === '1') {
+        this.yes = this.yes + 1;
+      }
+      if (this.vote === '0') {
+        this.no = this.no + 1;
+      }
+      console.log(this.vote);
+      this.chartData.series = [this.yes, this.no];
     });
-  }
+  },
+  beforeDestroy: function () {
+    this.socket.disconnect();
+  },
 }
 </script>
 
@@ -38,5 +64,12 @@ li {
 }
 a {
   color: #42b983;
+}
+
+.ct-label {
+    fill: white !important;
+    color: white !important;
+    font-size: 1rem !important;
+    line-height: 1;
 }
 </style>
